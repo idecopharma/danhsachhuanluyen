@@ -396,6 +396,35 @@
   .item-card.disabled .item-link { color: var(--muted); }
   .item-card.disabled .item-link::after { display: none; }
 
+  .item-card.podcast-link {
+    border-left: 3px solid var(--rust);
+  }
+  .item-card.podcast-link .item-link {
+    color: var(--rust);
+  }
+
+  /* Auto-search hint banner shown above stages */
+  .auto-search-hint {
+    background: linear-gradient(135deg, rgba(184, 149, 106, 0.12), rgba(182, 93, 61, 0.08));
+    border: 1px solid rgba(184, 149, 106, 0.25);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    font-size: 14px;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    line-height: 1.55;
+  }
+  .auto-search-hint strong { color: var(--gold-deep); }
+  .auto-search-hint::before {
+    content: '🎧';
+    font-size: 22px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
   .item-type-row {
     display: flex;
     align-items: center;
@@ -848,6 +877,11 @@
           Mỗi giai đoạn được thiết kế kế thừa nhau, giúp bạn tiến bộ vững chắc từ nền tảng đến chuyên sâu.
         </p>
       </div>
+      <div class="auto-search-hint">
+        <div>
+          <strong>Cách dùng:</strong> Bấm vào mục podcast/video bất kỳ — hệ thống sẽ tự mở ứng dụng nghe podcast và tìm kiếm đúng nội dung theo tiêu đề. Không cần copy-paste tên file.
+        </div>
+      </div>
       <div id="stagesContainer"></div>
     </div>
   </section>
@@ -883,6 +917,15 @@
         <!-- LEFT: stage selection + new item form -->
         <div>
           <div class="admin-card" style="margin-bottom: 20px;">
+            <h3>⚙️ Cấu hình ứng dụng nghe</h3>
+            <p class="card-sub">Đường dẫn đến file ứng dụng podcast. Mặc định <code style="background:var(--cream);padding:2px 6px;border-radius:3px;">podcast.html</code> nếu cùng thư mục.</p>
+            <div class="stage-rename-row">
+              <input type="text" id="podcastUrlInput" class="form-input" placeholder="podcast.html hoặc https://...">
+              <button class="btn btn-ghost" onclick="savePodcastUrl()">Lưu</button>
+            </div>
+          </div>
+
+          <div class="admin-card" style="margin-bottom: 20px;">
             <h3>Chọn giai đoạn</h3>
             <p class="card-sub">Chọn giai đoạn để quản lý nội dung bên trong.</p>
             <div class="form-group">
@@ -899,7 +942,7 @@
 
           <div class="admin-card">
             <h3 id="formTitle">Thêm nội dung</h3>
-            <p class="card-sub" id="formSubtitle">Bổ sung tài liệu / podcast / video cho giai đoạn.</p>
+            <p class="card-sub" id="formSubtitle">Để trống URL nếu là podcast/video — sẽ tự liên kết với ứng dụng nghe theo tiêu đề.</p>
             <form onsubmit="saveItem(event)">
               <input type="hidden" id="editItemId">
               <div class="form-group">
@@ -907,8 +950,8 @@
                 <input type="text" id="itemTitle" class="form-input" placeholder="VD: Bài 1 — Tổng quan sản phẩm" required>
               </div>
               <div class="form-group">
-                <label class="form-label">Đường dẫn (URL)</label>
-                <input type="url" id="itemUrl" class="form-input" placeholder="https://..." required>
+                <label class="form-label">Đường dẫn (tuỳ chọn)</label>
+                <input type="text" id="itemUrl" class="form-input" placeholder="Để trống nếu là podcast/video — sẽ tự liên kết với ứng dụng nghe">
               </div>
               <div class="form-group">
                 <label class="form-label">Mô tả ngắn (tuỳ chọn)</label>
@@ -960,14 +1003,15 @@
 
 <script>
   /* ============ STATE ============ */
-  const STORAGE_KEY = 'training_portal_data_v2';
+  const STORAGE_KEY = 'training_portal_data_v3';
   const ADMIN_PW = 'minhtriet1973';
 
   const DEFAULT_DATA = (() => {
     const mk = (id, num, title) => ({
-      id, title: `Số ${num} — ${title}`, url: '#', description: '', type: 'podcast'
+      id, title: `Số ${num} — ${title}`, url: '', description: '', type: 'podcast'
     });
     return {
+      podcastUrl: 'podcast.html',
       stages: [
         {
           id: 's1', name: 'Hội nhập & Tư duy ban đầu',
@@ -1126,6 +1170,8 @@
       if (!parsed.stages || !Array.isArray(parsed.stages)) {
         return JSON.parse(JSON.stringify(DEFAULT_DATA));
       }
+      // Backward-compat: ensure podcastUrl exists
+      if (!parsed.podcastUrl) parsed.podcastUrl = DEFAULT_DATA.podcastUrl;
       return parsed;
     } catch (e) {
       return JSON.parse(JSON.stringify(DEFAULT_DATA));
@@ -1190,6 +1236,31 @@
     return 'Tài liệu';
   }
 
+  function getSearchKeyword(title) {
+    // Extract topic part after em-dash. Format: "Số X — Topic" → "Topic"
+    const dashChars = ['—', '–', '-'];
+    for (const ch of dashChars) {
+      const idx = title.indexOf(ch);
+      if (idx > 0 && idx < title.length - 1) {
+        return title.slice(idx + 1).trim();
+      }
+    }
+    return title.trim();
+  }
+
+  function buildItemLink(item) {
+    const hasUrl = item.url && item.url !== '#' && item.url.trim() !== '';
+    if (hasUrl) {
+      return { href: item.url, label: 'Mở nội dung', enabled: true, isPodcast: false };
+    }
+    if (item.type === 'podcast' || item.type === 'video') {
+      const kw = getSearchKeyword(item.title);
+      const url = `${data.podcastUrl || 'podcast.html'}?search=${encodeURIComponent(kw)}`;
+      return { href: url, label: item.type === 'video' ? 'Mở video' : 'Nghe podcast', enabled: true, isPodcast: true };
+    }
+    return { href: '#', label: 'Sắp cập nhật liên kết', enabled: false, isPodcast: false };
+  }
+
   function renderHome() {
     const container = document.getElementById('stagesContainer');
     let totalItems = 0;
@@ -1207,17 +1278,18 @@
       const itemsHtml = stage.items.length === 0
         ? `<p class="empty-stage">Chưa có nội dung trong giai đoạn này.</p>`
         : `<div class="items-grid">${stage.items.map(item => {
-            const hasLink = item.url && item.url !== '#' && item.url.trim() !== '';
+            const link = buildItemLink(item);
             const inner = `
               <div class="item-type-row">
                 <span class="item-type ${escapeHtml(item.type)}">${typeIcon(item.type)} ${typeLabel(item.type)}</span>
               </div>
               <div class="item-title">${escapeHtml(item.title)}</div>
               ${item.description ? `<div class="item-desc">${escapeHtml(item.description)}</div>` : '<div class="item-desc"></div>'}
-              <div class="item-link">${hasLink ? 'Mở nội dung' : 'Sắp cập nhật liên kết'}</div>`;
-            return hasLink
-              ? `<a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer" class="item-card">${inner}</a>`
-              : `<div class="item-card disabled" title="Chưa có liên kết — vào Quản trị để bổ sung">${inner}</div>`;
+              <div class="item-link">${link.label}</div>`;
+            if (!link.enabled) {
+              return `<div class="item-card disabled" title="Chưa có liên kết — vào Quản trị để bổ sung">${inner}</div>`;
+            }
+            return `<a href="${escapeHtml(link.href)}" target="_blank" rel="noopener noreferrer" class="item-card${link.isPodcast ? ' podcast-link' : ''}">${inner}</a>`;
           }).join('')}</div>`;
 
       return `
@@ -1272,7 +1344,16 @@
       if (currentStageId) select.value = currentStageId;
     }
 
+    document.getElementById('podcastUrlInput').value = data.podcastUrl || 'podcast.html';
     renderAdminItems();
+  }
+
+  function savePodcastUrl() {
+    const v = document.getElementById('podcastUrlInput').value.trim();
+    if (!v) { showToast('Đường dẫn không được trống', 'error'); return; }
+    data.podcastUrl = v;
+    saveData();
+    showToast('Đã lưu đường dẫn ứng dụng', 'success');
   }
 
   function renderAdminItems() {
@@ -1294,18 +1375,24 @@
       return;
     }
 
-    list.innerHTML = stage.items.map(item => `
-      <div class="item-row">
-        <div class="item-row-info">
-          <div class="item-row-title">${typeIcon(item.type)} ${escapeHtml(item.title)}</div>
-          <div class="item-row-meta">${typeLabel(item.type)} · ${escapeHtml(item.url.slice(0, 50))}${item.url.length > 50 ? '...' : ''}</div>
+    list.innerHTML = stage.items.map(item => {
+      const link = buildItemLink(item);
+      const linkLabel = link.enabled
+        ? (link.isPodcast ? `🔗 Tự tìm: "${getSearchKeyword(item.title)}"` : `🌐 ${item.url.slice(0, 60)}${item.url.length > 60 ? '...' : ''}`)
+        : '⚠️ Chưa có link';
+      return `
+        <div class="item-row">
+          <div class="item-row-info">
+            <div class="item-row-title">${typeIcon(item.type)} ${escapeHtml(item.title)}</div>
+            <div class="item-row-meta">${typeLabel(item.type)} · ${escapeHtml(linkLabel)}</div>
+          </div>
+          <div class="item-row-actions">
+            <button class="icon-btn" onclick="editItem('${escapeHtml(item.id)}')" title="Sửa">✎</button>
+            <button class="icon-btn danger" onclick="deleteItem('${escapeHtml(item.id)}')" title="Xoá">✕</button>
+          </div>
         </div>
-        <div class="item-row-actions">
-          <button class="icon-btn" onclick="editItem('${escapeHtml(item.id)}')" title="Sửa">✎</button>
-          <button class="icon-btn danger" onclick="deleteItem('${escapeHtml(item.id)}')" title="Xoá">✕</button>
-        </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
   function onStageChange() {
@@ -1326,7 +1413,7 @@
     const type = document.querySelector('input[name="itemType"]:checked').value;
     const editId = document.getElementById('editItemId').value;
 
-    if (!title || !url) { showToast('Vui lòng nhập đầy đủ', 'error'); return; }
+    if (!title) { showToast('Vui lòng nhập tiêu đề', 'error'); return; }
 
     if (editId) {
       const item = stage.items.find(i => i.id === editId);
@@ -1355,7 +1442,7 @@
 
     document.getElementById('editItemId').value = item.id;
     document.getElementById('itemTitle').value = item.title;
-    document.getElementById('itemUrl').value = item.url;
+    document.getElementById('itemUrl').value = item.url || '';
     document.getElementById('itemDesc').value = item.description || '';
     document.querySelector(`input[name="itemType"][value="${item.type}"]`).checked = true;
 
@@ -1386,7 +1473,7 @@
     document.getElementById('itemDesc').value = '';
     document.getElementById('typeDoc').checked = true;
     document.getElementById('formTitle').textContent = 'Thêm nội dung';
-    document.getElementById('formSubtitle').textContent = 'Bổ sung tài liệu / podcast / video cho giai đoạn.';
+    document.getElementById('formSubtitle').textContent = 'Để trống URL nếu là podcast/video — sẽ tự liên kết với ứng dụng nghe theo tiêu đề.';
     document.getElementById('saveBtn').textContent = 'Lưu nội dung';
     document.getElementById('cancelBtn').style.display = 'none';
   }
