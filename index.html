@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cổng Đào Tạo Nhân Viên Kinh Doanh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F1EA;
+    --cream-dark: #EDE6D8;
+    --ink: #1A1F2E;
+    --ink-soft: #2C3347;
+    --muted: #6B7280;
+    --gold: #B8956A;
+    --gold-deep: #8E6E45;
+    --rust: #B65D3D;
+    --line: rgba(26, 31, 46, 0.12);
+    --shadow-sm: 0 1px 2px rgba(26, 31, 46, 0.05);
+    --shadow-md: 0 8px 24px rgba(26, 31, 46, 0.08);
+    --shadow-lg: 0 24px 60px rgba(26, 31, 46, 0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.55;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* Background texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      radial-gradient(circle at 20% 10%, rgba(184, 149, 106, 0.06) 0%, transparent 40%),
+      radial-gradient(circle at 80% 90%, rgba(182, 93, 61, 0.04) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ============ HEADER ============ */
+  header {
+    position: sticky;
+    top: 0;
+    background: rgba(245, 241, 234, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    z-index: 100;
+  }
+
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 0;
+    gap: 16px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+  }
+
+  .brand img {
+    height: 44px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+
+  .brand-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  .brand-sub {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .nav-btn {
+    padding: 10px 18px;
+    border: none;
+    background: transparent;
+    color: var(--ink-soft);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 999px;
+    transition: all 0.2s ease;
+    letter-spacing: -0.005em;
+  }
+
+  .nav-btn:hover { background: var(--cream-dark); }
+  .nav-btn.active {
+    background: var(--ink);
+    color: var(--cream);
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    padding: 80px 0 60px;
+    position: relative;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold-deep);
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(40px, 6vw, 72px);
+    line-height: 1.02;
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--rust);
+    font-weight: 400;
+  }
+
+  .hero-desc {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    max-width: 520px;
+    margin-bottom: 36px;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+
+  .stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: 36px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+
+  .hero-image-wrap {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  .hero-image-frame {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 4/5;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--cream-dark);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .hero-image-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-image-tag {
+    position: absolute;
+    bottom: -20px;
+    left: -20px;
+    background: var(--ink);
+    color: var(--cream);
+    padding: 14px 22px;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 600;
+    box-shadow: var(--shadow-md);
+  }
+
+  .hero-image-decor {
+    position: absolute;
+    top: -14px;
+    right: -14px;
+    width: 72px;
+    height: 72px;
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    z-index: -1;
+  }
+
+  /* ============ STAGES SECTION ============ */
+  .stages-section {
+    padding: 60px 0 100px;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 56px;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    line-height: 1.05;
+  }
+
+  .section-title em { font-style: italic; color: var(--rust); }
+
+  .section-subtitle {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 360px;
+    text-align: right;
+  }
+
+  .stage {
+    margin-bottom: 64px;
+    padding-bottom: 64px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .stage:last-child { border-bottom: none; margin-bottom: 0; }
+
+  .stage-header {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 24px;
+    align-items: baseline;
+    margin-bottom: 32px;
+  }
+
+  .stage-number {
+    font-family: 'Fraunces', serif;
+    font-size: 56px;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .stage-info h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .stage-info p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    padding-left: 104px;
+  }
+
+  .item-card {
+    background: #FFFFFF;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 22px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .item-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .item-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(184, 149, 106, 0.3);
+  }
+
+  .item-card:hover::before { transform: scaleX(1); }
+
+  .item-card.disabled {
+    cursor: default;
+    opacity: 0.78;
+    background: var(--cream-dark);
+  }
+  .item-card.disabled:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--line);
+  }
+  .item-card.disabled:hover::before { transform: scaleX(0); }
+  .item-card.disabled .item-link { color: var(--muted); }
+  .item-card.disabled .item-link::after { display: none; }
+
+  .item-type-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .item-type {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+
+  .item-type.document { background: rgba(184, 149, 106, 0.12); color: var(--gold-deep); }
+  .item-type.podcast { background: rgba(182, 93, 61, 0.12); color: var(--rust); }
+  .item-type.video { background: rgba(26, 31, 46, 0.08); color: var(--ink); }
+
+  .item-icon { width: 14px; height: 14px; }
+
+  .item-title {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  .item-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+    flex-grow: 1;
+  }
+
+  .item-link {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--ink);
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .item-link::after {
+    content: '→';
+    transition: transform 0.2s ease;
+  }
+
+  .item-card:hover .item-link::after { transform: translateX(4px); }
+
+  .empty-stage {
+    padding-left: 104px;
+    color: var(--muted);
+    font-style: italic;
+    font-size: 14px;
+  }
+
+  /* ============ ADMIN ============ */
+  .admin-view { display: none; padding: 60px 0 100px; }
+  .admin-view.active { display: block; }
+
+  .admin-gate {
+    max-width: 440px;
+    margin: 60px auto;
+    background: #FFFFFF;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 48px 40px;
+    box-shadow: var(--shadow-md);
+  }
+
+  .admin-gate h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    letter-spacing: -0.015em;
+  }
+
+  .admin-gate p {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 28px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+    background: var(--cream);
+    color: var(--ink);
+    transition: all 0.2s ease;
+  }
+
+  .form-textarea { resize: vertical; min-height: 70px; }
+
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(184, 149, 106, 0.15);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+  }
+
+  .btn-primary {
+    background: var(--ink);
+    color: var(--cream);
+  }
+  .btn-primary:hover {
+    background: var(--ink-soft);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+  }
+  .btn-ghost:hover { background: var(--cream-dark); }
+
+  .btn-danger {
+    background: transparent;
+    color: var(--rust);
+    border: 1px solid rgba(182, 93, 61, 0.3);
+  }
+  .btn-danger:hover { background: var(--rust); color: var(--cream); }
+
+  .btn-full { width: 100%; }
+
+  .admin-panel {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .admin-card {
+    background: #FFFFFF;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 28px;
+  }
+
+  .admin-card h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+
+  .admin-card .card-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 22px;
+  }
+
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .admin-title {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .radio-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .radio-pill {
+    flex: 1;
+    min-width: 100px;
+    position: relative;
+  }
+
+  .radio-pill input { position: absolute; opacity: 0; }
+
+  .radio-pill label {
+    display: block;
+    padding: 10px 14px;
+    text-align: center;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: var(--cream);
+  }
+
+  .radio-pill input:checked + label {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+
+  .item-list { margin-top: 8px; }
+
+  .item-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--cream);
+    border-radius: 4px;
+    margin-bottom: 8px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+  }
+
+  .item-row:hover { border-color: var(--line); }
+
+  .item-row-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .item-row-title {
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .item-row-meta {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  .item-row-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--line);
+    background: #FFFFFF;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    color: var(--ink-soft);
+  }
+
+  .icon-btn:hover { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+  .icon-btn.danger:hover { background: var(--rust); border-color: var(--rust); }
+
+  .empty-list {
+    padding: 32px 16px;
+    text-align: center;
+    color: var(--muted);
+    font-style: italic;
+    font-size: 14px;
+    background: var(--cream);
+    border-radius: 4px;
+  }
+
+  .stage-rename-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .stage-rename-row .form-input { flex: 1; }
+
+  /* ============ TOAST ============ */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--ink);
+    color: var(--cream);
+    padding: 14px 22px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: var(--shadow-lg);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 200;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { background: #2D5F3F; }
+  .toast.error { background: var(--rust); }
+
+  /* ============ FOOTER ============ */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 32px 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+    .hero-image-wrap { order: -1; }
+    .hero-image-frame { max-width: 320px; }
+    .admin-panel { grid-template-columns: 1fr; }
+    .items-grid { padding-left: 0; }
+    .empty-stage { padding-left: 0; }
+    .stage-header { grid-template-columns: 1fr; gap: 8px; }
+    .stage-number { font-size: 40px; }
+    .section-header { flex-direction: column; align-items: flex-start; }
+    .section-subtitle { text-align: left; }
+    .hero-stats { gap: 24px; flex-wrap: wrap; }
+    .brand-text { display: none; }
+  }
+
+  @media (max-width: 540px) {
+    .container { padding: 0 16px; }
+    .hero { padding: 40px 0 30px; }
+    .hero-stats { gap: 20px; }
+    .stat-num { font-size: 28px; }
+    .nav-btn { padding: 8px 14px; font-size: 13px; }
+    .item-row { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <nav class="nav">
+      <div class="brand" onclick="showHome()">
+        <img src="https://cdn.imgpile.com/f/GK3nMDF_xl.png" alt="Logo công ty">
+        <div class="brand-text">
+          <span class="brand-title">Cổng Đào Tạo</span>
+          <span class="brand-sub">Sales Academy</span>
+        </div>
+      </div>
+      <div class="nav-links">
+        <button class="nav-btn active" id="navHome" onclick="showHome()">Trang chủ</button>
+        <button class="nav-btn" id="navAdmin" onclick="showAdmin()">Quản trị</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HOME VIEW ============ -->
+<main id="homeView">
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">Hành trình phát triển</div>
+          <h1>Đào tạo nhân viên<br><em>kinh doanh chuyên nghiệp</em></h1>
+          <p class="hero-desc">
+            Hệ thống tài liệu, podcast và video được thiết kế theo từng giai đoạn — giúp đội ngũ kinh doanh nắm vững kiến thức, rèn luyện kỹ năng và phát triển tư duy bán hàng bài bản.
+          </p>
+          <div class="hero-stats">
+            <div>
+              <div class="stat-num" id="statStages">—</div>
+              <div class="stat-label">Giai đoạn</div>
+            </div>
+            <div>
+              <div class="stat-num" id="statItems">—</div>
+              <div class="stat-label">Nội dung</div>
+            </div>
+            <div>
+              <div class="stat-num">24/7</div>
+              <div class="stat-label">Truy cập</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-image-wrap">
+          <div class="hero-image-decor"></div>
+          <div class="hero-image-frame">
+            <img src="https://cdn.imgpile.com/f/k6mAb9L_xl.png" alt="Nhân viên kinh doanh">
+            <div class="hero-image-tag">Đội ngũ Sales</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stages-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Lộ trình đào tạo<br><em>theo giai đoạn</em></h2>
+        <p class="section-subtitle">
+          Mỗi giai đoạn được thiết kế kế thừa nhau, giúp bạn tiến bộ vững chắc từ nền tảng đến chuyên sâu.
+        </p>
+      </div>
+      <div id="stagesContainer"></div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ ADMIN VIEW ============ -->
+<main id="adminView" class="admin-view">
+  <div class="container">
+    <!-- Password gate -->
+    <div id="adminGate" class="admin-gate">
+      <h2>Khu vực Quản trị</h2>
+      <p>Vui lòng nhập mật khẩu để truy cập trang quản lý nội dung đào tạo.</p>
+      <form onsubmit="checkPassword(event)">
+        <div class="form-group">
+          <label class="form-label" for="pwInput">Mật khẩu</label>
+          <input type="password" id="pwInput" class="form-input" placeholder="••••••••" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Đăng nhập</button>
+      </form>
+    </div>
+
+    <!-- Admin panel -->
+    <div id="adminPanel" style="display:none;">
+      <div class="admin-header">
+        <div>
+          <div class="eyebrow">Quản trị nội dung</div>
+          <h2 class="admin-title">Bảng điều khiển</h2>
+        </div>
+        <button class="btn btn-ghost" onclick="logoutAdmin()">Đăng xuất</button>
+      </div>
+
+      <div class="admin-panel">
+        <!-- LEFT: stage selection + new item form -->
+        <div>
+          <div class="admin-card" style="margin-bottom: 20px;">
+            <h3>Chọn giai đoạn</h3>
+            <p class="card-sub">Chọn giai đoạn để quản lý nội dung bên trong.</p>
+            <div class="form-group">
+              <select id="stageSelect" class="form-select" onchange="onStageChange()"></select>
+            </div>
+            <button class="btn btn-ghost btn-full" onclick="addNewStage()">+ Thêm giai đoạn mới</button>
+            <div class="stage-rename-row">
+              <input type="text" id="stageRenameInput" class="form-input" placeholder="Đổi tên giai đoạn...">
+              <button class="btn btn-ghost" onclick="renameStage()">Đổi tên</button>
+            </div>
+            <button class="btn btn-danger btn-full" style="margin-top: 10px;" onclick="deleteStage()">Xóa giai đoạn này</button>
+            <button class="btn btn-ghost btn-full" style="margin-top: 6px;" onclick="resetAllData()">↻ Khôi phục dữ liệu mặc định</button>
+          </div>
+
+          <div class="admin-card">
+            <h3 id="formTitle">Thêm nội dung</h3>
+            <p class="card-sub" id="formSubtitle">Bổ sung tài liệu / podcast / video cho giai đoạn.</p>
+            <form onsubmit="saveItem(event)">
+              <input type="hidden" id="editItemId">
+              <div class="form-group">
+                <label class="form-label">Tiêu đề</label>
+                <input type="text" id="itemTitle" class="form-input" placeholder="VD: Bài 1 — Tổng quan sản phẩm" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Đường dẫn (URL)</label>
+                <input type="url" id="itemUrl" class="form-input" placeholder="https://..." required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Mô tả ngắn (tuỳ chọn)</label>
+                <textarea id="itemDesc" class="form-textarea" placeholder="Mô tả ngắn gọn về nội dung..."></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Loại nội dung</label>
+                <div class="radio-group">
+                  <div class="radio-pill">
+                    <input type="radio" id="typeDoc" name="itemType" value="document" checked>
+                    <label for="typeDoc">📄 Tài liệu</label>
+                  </div>
+                  <div class="radio-pill">
+                    <input type="radio" id="typePod" name="itemType" value="podcast">
+                    <label for="typePod">🎧 Podcast</label>
+                  </div>
+                  <div class="radio-pill">
+                    <input type="radio" id="typeVid" name="itemType" value="video">
+                    <label for="typeVid">🎬 Video</label>
+                  </div>
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button type="submit" class="btn btn-primary" style="flex:1;" id="saveBtn">Lưu nội dung</button>
+                <button type="button" class="btn btn-ghost" onclick="resetForm()" id="cancelBtn" style="display:none;">Huỷ</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- RIGHT: items list -->
+        <div class="admin-card">
+          <h3>Nội dung trong giai đoạn</h3>
+          <p class="card-sub" id="adminListSub">Danh sách nội dung hiện tại — bạn có thể chỉnh sửa hoặc xoá.</p>
+          <div id="adminItemList" class="item-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    © 2026 Cổng Đào Tạo Nhân Viên • Phát triển dành cho đội ngũ kinh doanh
+  </div>
+</footer>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  /* ============ STATE ============ */
+  const STORAGE_KEY = 'training_portal_data_v2';
+  const ADMIN_PW = 'minhtriet1973';
+
+  const DEFAULT_DATA = (() => {
+    const mk = (id, num, title) => ({
+      id, title: `Số ${num} — ${title}`, url: '#', description: '', type: 'podcast'
+    });
+    return {
+      stages: [
+        {
+          id: 's1', name: 'Hội nhập & Tư duy ban đầu',
+          description: 'Giúp nhân viên hiểu môi trường, văn hóa, mindset làm việc. Mục tiêu: hiểu "làm người trước khi làm việc".',
+          items: [
+            mk('s1_01', 1, 'Lời chia sẻ hội nhập'),
+            mk('s1_02', 2, 'Lời chia sẻ hội nhập'),
+            mk('s1_04', 4, 'Lời chia sẻ hội nhập'),
+            mk('s1_05', 5, 'Lời chia sẻ hội nhập'),
+            mk('s1_03', 3, 'Bạn kinh doanh mới cần tìm hiểu gì'),
+            mk('s1_06', 6, 'Nội dung toàn công ty nên nắm'),
+            mk('s1_07', 7, 'Quy định công việc cơ bản'),
+            mk('s1_08', 8, 'Những điều cần tránh'),
+            mk('s1_09', 9, 'Những điều cần tránh'),
+            mk('s1_10', 10, 'Những điều cần tránh'),
+            mk('s1_62', 62, 'Cách ứng xử công sở'),
+            mk('s1_64', 64, 'Tại sao phải phấn đấu mỗi ngày'),
+            mk('s1_74', 74, 'Tránh hối tiếc trong công việc'),
+            mk('s1_70', 70, 'Lý do không thành công & sai lầm phổ biến'),
+            mk('s1_71', 71, 'Lý do không thành công & sai lầm phổ biến'),
+            mk('s1_72', 72, 'Lý do không thành công & sai lầm phổ biến')
+          ]
+        },
+        {
+          id: 's2', name: 'Hiểu công việc & Cách làm việc',
+          description: 'Nắm rõ mình phải làm gì, làm đúng cách. Mục tiêu: làm việc có hệ thống, không làm theo cảm tính.',
+          items: [
+            mk('s2_12', 12, 'Checklist & kế hoạch'),
+            mk('s2_13', 13, 'Checklist & kế hoạch'),
+            mk('s2_14', 14, 'Checklist & kế hoạch'),
+            mk('s2_15', 15, 'Checklist & kế hoạch'),
+            mk('s2_69', 69, 'Chủ động công việc là gì'),
+            mk('s2_78', 78, 'Quản trị công việc'),
+            mk('s2_79', 79, 'Quản trị công việc'),
+            mk('s2_59', 59, 'KPI công ty'),
+            mk('s2_61', 61, 'Báo cáo cuối tháng'),
+            mk('s2_44', 44, 'Xử lý phát sinh'),
+            mk('s2_45', 45, 'Sai sót giao hàng ảnh hưởng gì')
+          ]
+        },
+        {
+          id: 's3', name: 'Công cụ & Quy trình (ERP — Nội bộ)',
+          description: 'Phải nắm cực chắc vì liên quan trực tiếp công việc. Mục tiêu: làm đúng quy trình = không bị lỗi hệ thống.',
+          items: [
+            mk('s3_17', 17, 'Lập kế hoạch tuần ERP'),
+            mk('s3_18', 18, 'Báo cáo giao dịch khách hàng'),
+            mk('s3_22', 22, 'Báo cáo giao dịch khách hàng'),
+            mk('s3_19', 19, 'Quản lý khách hàng trên ERP'),
+            mk('s3_20', 20, 'Lên đơn hàng ERP'),
+            mk('s3_21', 21, 'Lên đơn hàng ERP'),
+            mk('s3_82', 82, 'Lên đơn hàng ERP'),
+            mk('s3_80', 80, 'Quản lý khách hàng – Chăm sóc KH'),
+            mk('s3_83', 83, 'Quản lý khách hàng – Chăm sóc KH'),
+            mk('s3_52', 52, 'IDECO AI'),
+            mk('s3_53', 53, 'IDECO AI'),
+            mk('s3_41', 41, 'Quy trình công ty'),
+            mk('s3_42', 42, 'Quy trình công ty'),
+            mk('s3_46', 46, 'Điều phối kho'),
+            mk('s3_47', 47, 'Điều phối kho'),
+            mk('s3_48', 48, 'Điều phối kho'),
+            mk('s3_49', 49, 'Vai trò điều phối & phát triển KD'),
+            mk('s3_50', 50, 'Vai trò điều phối & phát triển KD'),
+            mk('s3_51', 51, 'Vai trò điều phối & phát triển KD')
+          ]
+        },
+        {
+          id: 's4', name: 'Kỹ năng kinh doanh cơ bản',
+          description: 'Học cách nói chuyện – làm việc với khách hàng. Mục tiêu: biết nói chuyện để bán được hàng.',
+          items: [
+            mk('s4_29', 29, 'Tránh dùng từ sai'),
+            mk('s4_30', 30, 'Giao tiếp khách hàng'),
+            mk('s4_31', 31, 'Giao tiếp khách hàng'),
+            mk('s4_40', 40, 'Giao dịch hợp tác'),
+            mk('s4_84', 84, 'Thiết lập giao dịch'),
+            mk('s4_76', 76, 'Kịch bản telesales'),
+            mk('s4_63', 63, 'Thuyết phục khách hàng'),
+            mk('s4_65', 65, 'Kỹ năng chốt sales')
+          ]
+        },
+        {
+          id: 's5', name: 'Bán hàng thực chiến & Xử lý tình huống',
+          description: 'Phần này cực quan trọng để "ra số". Mục tiêu: biết bán hàng thật – không chỉ học lý thuyết.',
+          items: [
+            mk('s5_33', 33, 'Vì sao không chốt được đơn'),
+            mk('s5_34', 34, 'Xử lý tình huống bán hàng'),
+            mk('s5_35', 35, 'Xử lý tình huống bán hàng'),
+            mk('s5_36', 36, 'Những lỗi cần tránh'),
+            mk('s5_37', 37, 'Xử lý đơn hàng'),
+            mk('s5_38', 38, 'Xử lý đơn hàng'),
+            mk('s5_60', 60, 'Rút kinh nghiệm chốt sales'),
+            mk('s5_66', 66, 'Lỗi kinh doanh'),
+            mk('s5_67', 67, 'Sai lầm báo giá'),
+            mk('s5_72b', 72, 'Sai lầm không phát triển')
+          ]
+        },
+        {
+          id: 's6', name: 'Kiến thức ngành (Dược & Sản phẩm)',
+          description: 'Bắt buộc với kinh doanh ngành thuốc. Mục tiêu: hiểu sản phẩm = bán hàng tự tin hơn.',
+          items: [
+            mk('s6_32', 32, 'Kinh doanh thuốc'),
+            mk('s6_67b', 67, 'Bán thuốc cần hiểu gì'),
+            mk('s6_68', 68, 'Nhóm không phải thuốc'),
+            mk('s6_75', 75, 'Chính sách bán thuốc'),
+            mk('s6_80b', 80, 'Giao dịch thuốc')
+          ]
+        },
+        {
+          id: 's7', name: 'Quy định – Chuẩn GDP – Thanh tra',
+          description: 'Quan trọng để không "dính lỗi pháp lý". Mục tiêu: làm đúng luật – tránh rủi ro lớn.',
+          items: [
+            mk('s7_43', 43, 'GDP là gì'),
+            mk('s7_56', 56, 'Chuẩn bị thẩm định'),
+            mk('s7_57', 57, 'Tình huống thanh tra'),
+            mk('s7_58', 58, 'Tình huống thanh tra')
+          ]
+        },
+        {
+          id: 's8', name: 'Phát triển nâng cao & Quản lý',
+          description: 'Dành cho người muốn lên level nhanh. Mục tiêu: từ nhân viên → người có tư duy quản lý.',
+          items: [
+            mk('s8_39', 39, 'Quản lý chuỗi nhà thuốc'),
+            mk('s8_81', 81, 'Pharmacity'),
+            mk('s8_82b', 82, 'Chính sách thưởng'),
+            mk('s8_77', 77, 'AI trợ lý BGĐ'),
+            mk('s8_85', 85, 'Tham gia đào tạo')
+          ]
+        },
+        {
+          id: 's9', name: 'Tư duy – Động lực – Phát triển bản thân',
+          description: 'Không có cái này thì khó đi đường dài. Mục tiêu: giữ lửa & phát triển bền.',
+          items: [
+            mk('s9_23', 23, 'Chuỗi lời khuyên kinh doanh'),
+            mk('s9_24', 24, 'Chuỗi lời khuyên kinh doanh'),
+            mk('s9_25', 25, 'Chuỗi lời khuyên kinh doanh'),
+            mk('s9_26', 26, 'Chuỗi lời khuyên kinh doanh'),
+            mk('s9_27', 27, 'Chuỗi lời khuyên kinh doanh'),
+            mk('s9_28', 28, 'Chuỗi lời khuyên kinh doanh'),
+            mk('s9_11', 11, 'Đừng để tiếc nuối'),
+            mk('s9_73', 73, 'Thư giãn'),
+            mk('s9_77b', 77, 'Hiểu chuyện để làm tốt')
+          ]
+        }
+      ]
+    };
+  })();
+
+  let data = loadData();
+  let currentStageId = data.stages[0]?.id || null;
+  let isAdminAuthed = false;
+
+  function loadData() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return JSON.parse(JSON.stringify(DEFAULT_DATA));
+      const parsed = JSON.parse(raw);
+      if (!parsed.stages || !Array.isArray(parsed.stages)) {
+        return JSON.parse(JSON.stringify(DEFAULT_DATA));
+      }
+      return parsed;
+    } catch (e) {
+      return JSON.parse(JSON.stringify(DEFAULT_DATA));
+    }
+  }
+
+  function saveData() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {
+      showToast('Không thể lưu dữ liệu', 'error');
+    }
+  }
+
+  function genId() {
+    return 'i_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  }
+
+  /* ============ TOAST ============ */
+  function showToast(msg, type = '') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show ' + type;
+    setTimeout(() => t.className = 'toast ' + type, 2400);
+  }
+
+  /* ============ NAVIGATION ============ */
+  function showHome() {
+    document.getElementById('homeView').style.display = '';
+    document.getElementById('adminView').classList.remove('active');
+    document.getElementById('navHome').classList.add('active');
+    document.getElementById('navAdmin').classList.remove('active');
+    renderHome();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showAdmin() {
+    document.getElementById('homeView').style.display = 'none';
+    document.getElementById('adminView').classList.add('active');
+    document.getElementById('navHome').classList.remove('active');
+    document.getElementById('navAdmin').classList.add('active');
+    if (isAdminAuthed) renderAdmin();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ============ HOME RENDERING ============ */
+  function escapeHtml(s) {
+    return String(s || '').replace(/[&<>"']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[c]));
+  }
+
+  function typeIcon(type) {
+    if (type === 'podcast') return '🎧';
+    if (type === 'video') return '🎬';
+    return '📄';
+  }
+
+  function typeLabel(type) {
+    if (type === 'podcast') return 'Podcast';
+    if (type === 'video') return 'Video';
+    return 'Tài liệu';
+  }
+
+  function renderHome() {
+    const container = document.getElementById('stagesContainer');
+    let totalItems = 0;
+    data.stages.forEach(s => totalItems += s.items.length);
+    document.getElementById('statStages').textContent = data.stages.length.toString().padStart(2, '0');
+    document.getElementById('statItems').textContent = totalItems.toString().padStart(2, '0');
+
+    if (data.stages.length === 0) {
+      container.innerHTML = '<p class="empty-stage" style="padding-left:0;">Chưa có giai đoạn nào. Vào trang Quản trị để thêm.</p>';
+      return;
+    }
+
+    container.innerHTML = data.stages.map((stage, idx) => {
+      const num = String(idx + 1).padStart(2, '0');
+      const itemsHtml = stage.items.length === 0
+        ? `<p class="empty-stage">Chưa có nội dung trong giai đoạn này.</p>`
+        : `<div class="items-grid">${stage.items.map(item => {
+            const hasLink = item.url && item.url !== '#' && item.url.trim() !== '';
+            const inner = `
+              <div class="item-type-row">
+                <span class="item-type ${escapeHtml(item.type)}">${typeIcon(item.type)} ${typeLabel(item.type)}</span>
+              </div>
+              <div class="item-title">${escapeHtml(item.title)}</div>
+              ${item.description ? `<div class="item-desc">${escapeHtml(item.description)}</div>` : '<div class="item-desc"></div>'}
+              <div class="item-link">${hasLink ? 'Mở nội dung' : 'Sắp cập nhật liên kết'}</div>`;
+            return hasLink
+              ? `<a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer" class="item-card">${inner}</a>`
+              : `<div class="item-card disabled" title="Chưa có liên kết — vào Quản trị để bổ sung">${inner}</div>`;
+          }).join('')}</div>`;
+
+      return `
+        <div class="stage" id="stage-${escapeHtml(stage.id)}">
+          <div class="stage-header">
+            <div class="stage-number">${num}</div>
+            <div class="stage-info">
+              <h3>${escapeHtml(stage.name)}</h3>
+              ${stage.description ? `<p>${escapeHtml(stage.description)}</p>` : ''}
+            </div>
+          </div>
+          ${itemsHtml}
+        </div>
+      `;
+    }).join('');
+  }
+
+  /* ============ ADMIN AUTH ============ */
+  function checkPassword(e) {
+    e.preventDefault();
+    const pw = document.getElementById('pwInput').value;
+    if (pw === ADMIN_PW) {
+      isAdminAuthed = true;
+      document.getElementById('adminGate').style.display = 'none';
+      document.getElementById('adminPanel').style.display = '';
+      renderAdmin();
+      showToast('Đăng nhập thành công', 'success');
+    } else {
+      showToast('Mật khẩu không đúng', 'error');
+      document.getElementById('pwInput').value = '';
+    }
+  }
+
+  function logoutAdmin() {
+    isAdminAuthed = false;
+    document.getElementById('adminGate').style.display = '';
+    document.getElementById('adminPanel').style.display = 'none';
+    document.getElementById('pwInput').value = '';
+    resetForm();
+    showToast('Đã đăng xuất');
+  }
+
+  /* ============ ADMIN RENDERING ============ */
+  function renderAdmin() {
+    const select = document.getElementById('stageSelect');
+    select.innerHTML = data.stages.map((s, i) =>
+      `<option value="${escapeHtml(s.id)}" ${s.id === currentStageId ? 'selected' : ''}>Giai đoạn ${i+1}: ${escapeHtml(s.name)}</option>`
+    ).join('');
+
+    if (!data.stages.find(s => s.id === currentStageId)) {
+      currentStageId = data.stages[0]?.id || null;
+      if (currentStageId) select.value = currentStageId;
+    }
+
+    renderAdminItems();
+  }
+
+  function renderAdminItems() {
+    const stage = data.stages.find(s => s.id === currentStageId);
+    const list = document.getElementById('adminItemList');
+    const sub = document.getElementById('adminListSub');
+
+    if (!stage) {
+      list.innerHTML = '<div class="empty-list">Chưa có giai đoạn nào.</div>';
+      sub.textContent = '—';
+      return;
+    }
+
+    sub.textContent = `Đang quản lý: ${stage.name} (${stage.items.length} nội dung)`;
+    document.getElementById('stageRenameInput').value = stage.name;
+
+    if (stage.items.length === 0) {
+      list.innerHTML = '<div class="empty-list">Chưa có nội dung. Hãy thêm bằng biểu mẫu bên trái.</div>';
+      return;
+    }
+
+    list.innerHTML = stage.items.map(item => `
+      <div class="item-row">
+        <div class="item-row-info">
+          <div class="item-row-title">${typeIcon(item.type)} ${escapeHtml(item.title)}</div>
+          <div class="item-row-meta">${typeLabel(item.type)} · ${escapeHtml(item.url.slice(0, 50))}${item.url.length > 50 ? '...' : ''}</div>
+        </div>
+        <div class="item-row-actions">
+          <button class="icon-btn" onclick="editItem('${escapeHtml(item.id)}')" title="Sửa">✎</button>
+          <button class="icon-btn danger" onclick="deleteItem('${escapeHtml(item.id)}')" title="Xoá">✕</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function onStageChange() {
+    currentStageId = document.getElementById('stageSelect').value;
+    resetForm();
+    renderAdminItems();
+  }
+
+  /* ============ ITEM CRUD ============ */
+  function saveItem(e) {
+    e.preventDefault();
+    const stage = data.stages.find(s => s.id === currentStageId);
+    if (!stage) { showToast('Chưa chọn giai đoạn', 'error'); return; }
+
+    const title = document.getElementById('itemTitle').value.trim();
+    const url = document.getElementById('itemUrl').value.trim();
+    const desc = document.getElementById('itemDesc').value.trim();
+    const type = document.querySelector('input[name="itemType"]:checked').value;
+    const editId = document.getElementById('editItemId').value;
+
+    if (!title || !url) { showToast('Vui lòng nhập đầy đủ', 'error'); return; }
+
+    if (editId) {
+      const item = stage.items.find(i => i.id === editId);
+      if (item) {
+        item.title = title;
+        item.url = url;
+        item.description = desc;
+        item.type = type;
+        showToast('Đã cập nhật nội dung', 'success');
+      }
+    } else {
+      stage.items.push({ id: genId(), title, url, description: desc, type });
+      showToast('Đã thêm nội dung mới', 'success');
+    }
+
+    saveData();
+    resetForm();
+    renderAdminItems();
+  }
+
+  function editItem(id) {
+    const stage = data.stages.find(s => s.id === currentStageId);
+    if (!stage) return;
+    const item = stage.items.find(i => i.id === id);
+    if (!item) return;
+
+    document.getElementById('editItemId').value = item.id;
+    document.getElementById('itemTitle').value = item.title;
+    document.getElementById('itemUrl').value = item.url;
+    document.getElementById('itemDesc').value = item.description || '';
+    document.querySelector(`input[name="itemType"][value="${item.type}"]`).checked = true;
+
+    document.getElementById('formTitle').textContent = 'Chỉnh sửa nội dung';
+    document.getElementById('formSubtitle').textContent = 'Cập nhật thông tin và nhấn Lưu để hoàn tất.';
+    document.getElementById('saveBtn').textContent = 'Cập nhật';
+    document.getElementById('cancelBtn').style.display = '';
+
+    document.getElementById('itemTitle').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    document.getElementById('itemTitle').focus();
+  }
+
+  function deleteItem(id) {
+    if (!confirm('Bạn chắc chắn muốn xoá nội dung này?')) return;
+    const stage = data.stages.find(s => s.id === currentStageId);
+    if (!stage) return;
+    stage.items = stage.items.filter(i => i.id !== id);
+    saveData();
+    resetForm();
+    renderAdminItems();
+    showToast('Đã xoá nội dung', 'success');
+  }
+
+  function resetForm() {
+    document.getElementById('editItemId').value = '';
+    document.getElementById('itemTitle').value = '';
+    document.getElementById('itemUrl').value = '';
+    document.getElementById('itemDesc').value = '';
+    document.getElementById('typeDoc').checked = true;
+    document.getElementById('formTitle').textContent = 'Thêm nội dung';
+    document.getElementById('formSubtitle').textContent = 'Bổ sung tài liệu / podcast / video cho giai đoạn.';
+    document.getElementById('saveBtn').textContent = 'Lưu nội dung';
+    document.getElementById('cancelBtn').style.display = 'none';
+  }
+
+  /* ============ STAGE CRUD ============ */
+  function addNewStage() {
+    const name = prompt('Tên giai đoạn mới:');
+    if (!name || !name.trim()) return;
+    const desc = prompt('Mô tả ngắn (có thể bỏ trống):') || '';
+    const newStage = {
+      id: 's_' + Date.now().toString(36),
+      name: name.trim(),
+      description: desc.trim(),
+      items: []
+    };
+    data.stages.push(newStage);
+    currentStageId = newStage.id;
+    saveData();
+    renderAdmin();
+    showToast('Đã thêm giai đoạn mới', 'success');
+  }
+
+  function renameStage() {
+    const stage = data.stages.find(s => s.id === currentStageId);
+    if (!stage) return;
+    const newName = document.getElementById('stageRenameInput').value.trim();
+    if (!newName) { showToast('Tên không hợp lệ', 'error'); return; }
+    stage.name = newName;
+    saveData();
+    renderAdmin();
+    showToast('Đã đổi tên giai đoạn', 'success');
+  }
+
+  function deleteStage() {
+    const stage = data.stages.find(s => s.id === currentStageId);
+    if (!stage) return;
+    if (!confirm(`Xoá giai đoạn "${stage.name}" và toàn bộ nội dung bên trong?`)) return;
+    data.stages = data.stages.filter(s => s.id !== currentStageId);
+    currentStageId = data.stages[0]?.id || null;
+    saveData();
+    renderAdmin();
+    showToast('Đã xoá giai đoạn', 'success');
+  }
+
+  function resetAllData() {
+    if (!confirm('Khôi phục toàn bộ 9 giai đoạn và 86 nội dung mặc định? Mọi thay đổi hiện tại sẽ bị mất.')) return;
+    data = JSON.parse(JSON.stringify(DEFAULT_DATA));
+    currentStageId = data.stages[0]?.id || null;
+    saveData();
+    renderAdmin();
+    showToast('Đã khôi phục dữ liệu mặc định', 'success');
+  }
+
+  /* ============ INIT ============ */
+  renderHome();
+</script>
+
+</body>
+</html>
